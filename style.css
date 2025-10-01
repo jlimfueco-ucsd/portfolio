@@ -1,0 +1,15 @@
+body {
+  /* Set line height to 1.5 times the font size
+	   and use the OS’s UI font as the website font
+	 */
+  font: 100%/1.5 system-ui;
+}
+
+.scaleA {
+  /* width: 400px; */
+  width: 50%;
+  height: auto;
+  display: block;
+  margin: 20px 0 20px 20px;
+  border-radius: 8px;
+}
