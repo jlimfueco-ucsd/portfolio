@@ -5,9 +5,9 @@ body {
   font: 100%/1.5 system-ui;
 }
 
-.scaleA {
-  /* width: 400px; */
-  width: 50%;
+.scale30 {
+  /* width: 30% of page; */
+  width: 30%;
   height: auto;
   display: block;
   margin: 20px 0 20px 20px;
