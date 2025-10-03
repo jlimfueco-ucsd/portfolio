@@ -45,7 +45,42 @@ html, body{
 
 embed {
   display: block;
+  width: 100dvh;
+  height: 90dvh;
+  margin: 20px 0 20px 20px;
+}
+
+/* .pdf-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+} */
+
+html, body { margin: 0; padding: 0; }
+
+/* mod the div for the embed */
+.pdf-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  height: 100dvh;
+  height: calc(100dvh - 140px);
+  box-sizing: border-box;
+  margin-top: 40px;
+  padding: 10px 0;
+}
+
+mod the pdf 
+.pdf-view {
+  width: min(90vw, 3000px); /*take the min between a size or the % width*/
+  height: 95%;
   border: none;
+  box-shadow: 0 0 10px rgba(0,0,0,.2);
+}
+
+h1 {
+  padding-left: 20px;
+}
+p {
+  padding-left: 20px;
 }
