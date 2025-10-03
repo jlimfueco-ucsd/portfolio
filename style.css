@@ -72,7 +72,7 @@ html, body { margin: 0; padding: 0; }
 
 mod the pdf 
 .pdf-view {
-  width: min(90vw, 3000px); /*take the min between a size or the % width*/
+  width: min(90vw, 1000px); /*take the min between a size or the % width*/
   height: 95%;
   border: none;
   box-shadow: 0 0 10px rgba(0,0,0,.2);
