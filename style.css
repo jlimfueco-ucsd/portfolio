@@ -32,7 +32,6 @@ nav {
   width: 100%;
   margin: 0 auto 1em;
   padding: 0.5em 0 0;
-  border-bottom: 1px solid oklch(80% 3% 200);
   /* border-bottom: none; */
   color: #222;
 }
@@ -54,6 +53,7 @@ nav ul {
   width: min(90vw, 800px);
   padding: 0;
   margin: 0;
+  border-bottom: 1px solid oklch(80% 3% 200);
 }
 
 nav li {flex: 1;}
@@ -70,10 +70,13 @@ nav a {
   transition: color 0.2s ease;
 }
 nav a:hover {
-  color: var(--color-accent); background-color: oklch(from var(--color-accent) 95% 5% h)}
+  /* color: var(--color-accent);  */
+  background-color: oklch(from var(--color-accent) 95% 5% h);
+  border-bottom: 0.4em solid var(--color-accent);
+}
 
 nav a.current {
-  border-bottom: 0.4em solid var(--color-accent);
+  border-bottom: 0.4em solid oklch(80% 3% 200);
   padding-bottom: 0;
   /* margin-bottom: -0.4em; */
   font-weight: bold;
