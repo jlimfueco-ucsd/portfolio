@@ -14,6 +14,47 @@ body {
   margin-inline: auto;
 }
 
+input,
+textarea,
+button {
+  font: inherit;
+}
+
+/* contact/ form updates */
+form {
+  display: block;
+  width: 100%;
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+
+label, input, textarea, button {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+}
+
+label {
+  margin-block: 0.5rem 0.25rem;
+}
+
+
+input,
+textarea {
+  padding: 0.5rem;
+  border: 1px solid oklch(0% 0 0);
+  border-radius: 4px;
+}
+
+button {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0;
+  border: 1px solid oklch(80% 3% 200);
+  /* background: oklch(from var(--color-accent) 95% 5% h); */
+  cursor: pointer;
+}
+
 /* the image is too large so I went ahead to scale it/ make it pretty */
 .scale40 {
   /* width: 30% of page; */
@@ -82,6 +123,8 @@ nav a.current {
   font-weight: bold;
 }
 
+
+/* code for the pdf page */
 embed {
   display: block;
   width: 100dvh;
