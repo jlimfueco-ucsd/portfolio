@@ -1,3 +1,8 @@
+:root {
+  --color-accent: oklch(0.7311 0.1327 231.18);
+  accent-color: var(--color-accent);
+}
+
 html, body { height: 100%; margin: 0; padding: 0; }
 
 body {
@@ -19,26 +24,59 @@ body {
   border-radius: 8px;
 }
 
-/* unorg list format */
+/* NAV WRAPPER */
+nav {
+  position: relative;              /* enables the ::after line positioning */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto 1em;
+  padding: 0.5em 0;               /* no bottom padding needed */
+  color: #222;
+}
+
+/* the grey rule under the whole nav */
+nav::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;                       /* flush with the bottom edge */
+  height: 1px;                     /* adjust thickness if you want */
+  background: oklch(80% 0.03 200); /* your subtle grey */
+}
+
+/* list + items */
 nav ul {
-  list-style-type: disc;
-  padding-left: 20px;
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+  width: min(90vw, 800px);
+  margin: 0;
+  padding: 0;
 }
+nav li { flex: 1; }
 
-/* line format for the nav */
-nav li {
-  margin-bottom: 10px;
-}
-
-/* format for anchor */
+/* links */
 nav a {
+  display: block;
   text-decoration: none;
-  color: darkblue;
+  text-align: center;
+  color: inherit;
+  line-height: 1;                  /* removes stray vertical leading */
+  padding: 0.5em 0;
+  transition: color .2s ease;
 }
 
-/* reaction on clicking */
-nav a:hover {
-  color: orange;
+nav a:hover { color: var(--color-accent); }
+
+/* current link — sits directly on the grey line now */
+nav a.current {
+  border-bottom: 0.4em solid var(--color-accent);
+  padding-bottom: 0;
+  /* no negative margin needed */
+  font-weight: bold;
 }
 
 
