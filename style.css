@@ -186,3 +186,52 @@ embed {
 
 h1 {padding-left: 20px;}
 p {padding-left: 20px;}
+
+/* 2.4.4 – Heading hierarchy & readability */
+h1 {
+  font-size: 400%;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+h2, h3, h4, h5, h6 {
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+
+/* 2.4.2 */
+.projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+  gap: 1.5em;
+  margin: 1rem 0;
+  grid-auto-rows: max-content;
+}
+
+.projects article {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+  align-content: start;
+  /* gap: .5 rem; */
+  /* padding: .5rem; */
+  /* border-radius: 8px; */
+  /* border: 1px solid oklch(80% 3% 200); */
+  /* background: oklch(98% 0 0) */
+}
+
+.projects h2 {
+  margin: 0 0 .5rem;
+  line-height: 1.2;
+  text-wrap: balance;
+  /* hyphens: auto; */
+  font-size: clamp(1.1rem, 1rem + 1vw, 1.6rem);
+}
+.projects p {margin: 0;}
+
+/* .projects img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+} */
