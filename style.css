@@ -50,7 +50,7 @@ form button {
   justify-self: stretch;
 }
 
-/* this was som 2.3.2 stuff */
+/* this was some 2.3.2 stuff */
 /* label, input, textarea, button {
   display: block;
   width: 100%;
@@ -62,7 +62,6 @@ form button {
 label {
   margin-block: 0.5rem 0.25rem;
 }
-
 
 input,
 textarea {
@@ -101,7 +100,7 @@ nav {
   /* border-bottom: none; */
   color: #222;
 }
-/* the grey rule under the whole nav */
+
 /* nav::after {
   content: "";
   position: absolute;
@@ -163,25 +162,39 @@ embed {
   padding: 20px;
 } */
 
-/* mod the div for the embed */
+/* mod the div for the embed MORE LAB 2.5 WORK */ 
+
+.resume {
+  display: grid;
+  place-items: center;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+  width 100%;
+}
+
 .pdf-container {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: calc(100dvh - 140px);
+  height: calc(100vh - 140px);
   box-sizing: border-box;
-  margin-top: 40px;
-  padding: 10px 0;
 }
 
 /* mod the pdf  */
 .pdf-view {
-  width: min(90vw, 1000px); /*take the min between a size or the % width*/
+  flex: 1;
   height: 95%;
   border: none;
+  width: min(90vw, 1000px); /*take the min between a size or the % width*/
   box-shadow: 0 0 10px rgba(0,0,0,.2);
-  margin-inline: auto;
+  /* margin-inline: auto; */
+  /* background: white; */
+}
+
+.resume h1 {
+  margin: 1rem 0;
+  text-align: center;
 }
 
 h1 {padding-left: 20px;}
