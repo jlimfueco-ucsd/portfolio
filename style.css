@@ -3,6 +3,8 @@
   accent-color: var(--color-accent);
 }
 
+html { color-scheme: light dark;}
+
 html, body { height: 100%; margin: 0; padding: 0; }
 
 body {
@@ -90,6 +92,7 @@ button {
 }
 
 nav {
+  --border-color: oklch(30.621% 0.00423 197.39);
   position: relative;
   display: flex;
   align-items: center;
@@ -98,7 +101,7 @@ nav {
   margin: 0 auto 1em;
   padding: 0.5em 0 0;
   /* border-bottom: none; */
-  color: #222;
+  /* color: #222; */
 }
 
 /* nav::after {
@@ -118,7 +121,7 @@ nav ul {
   width: min(90vw, 800px);
   padding: 0;
   margin: 0;
-  border-bottom: 1px solid oklch(80% 3% 200);
+  border-bottom: 1px solid var(--border-color);
 }
 
 nav li {flex: 1;}
@@ -131,12 +134,23 @@ nav a {
   text-align: center;
   color: inherit;
   line-height: 1;
-  padding: 0.5e 0;
+  padding: 0.4 0;
   transition: color 0.2s ease;
+  margin-bottom: -2px;
+  z-index: 0;
 }
+
 nav a:hover {
   /* color: var(--color-accent);  */
-  background-color: oklch(from var(--color-accent) 95% 5% h);
+  /* background-color: oklch(from var(--color-accent) 95% 5% h); // this was lab 2 work */ 
+  background-color: color-mix(in oklch, var(--color-accent), canvas 85%);
+  border-bottom: 0.4em solid var(--color-accent);
+  /* transform: translateY(0.5px); */
+  /* padding: 0.4em 0; */
+}
+
+nav a.current:hover {
+  background: none;
   border-bottom: 0.4em solid var(--color-accent);
 }
 
@@ -146,6 +160,7 @@ nav a.current {
   /* margin-bottom: -0.4em; */
   font-weight: bold;
 }
+
 
 
 /* code for the pdf page */
@@ -169,7 +184,7 @@ embed {
   place-items: center;
   grid-template-rows: auto 1fr;
   min-height: 100vh;
-  width 100%;
+  width: 100%;
 }
 
 .pdf-container {

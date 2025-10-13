@@ -56,7 +56,7 @@ for (let p of pages) {
   // Lab 3.3.2 most of it is url sanity checks and adding functions to particular links
   a.classList.toggle(
   'current',
-  a.host === location.host && a.pathname === location.pathname,
+  a.host === location.host && a.pathname === location.pathname, // makes it so that the class 'current' is added so that the css work for current is enabled
   );
   // open external links in new tab with the a.target
   const isExternal = a.host !== location.host;
@@ -64,7 +64,7 @@ for (let p of pages) {
     a.target = '_blank';
     a.rel = 'noopener noreferrer'; // this is very much a security vulnerability tldr sever realtions to my portfolio site leading into the github
   }
-  
+
   li.appendChild(a);
   ul.appendChild(li);
 }
