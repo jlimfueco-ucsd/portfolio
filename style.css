@@ -161,8 +161,6 @@ nav a.current {
   font-weight: bold;
 }
 
-
-
 /* code for the pdf page */
 embed {
   display: block;
@@ -263,3 +261,27 @@ h2, h3, h4, h5, h6 {
   height: auto;
   border-radius: 4px;
 } */
+
+
+/* Lab 4.4.2 theme placement */
+.color-scheme {
+  position: fixed;
+  top: 1px;
+  right: 1px;
+  font-size: 80%;
+  font-family: inherit;
+  color: inherit;
+  background: transparent;
+  z-index: 10; /* keep above nav */
+}
+
+.color-scheme select {
+  margin-left: 0.3em;
+  padding: 0.2em 0.5em;
+  border-radius: 6px;
+  border: 1px solid var(--border-color, #555);
+  background: var(--canvas, canvas);
+  color: inherit;
+  font: inherit;
+  /* cursor: pointer; */
+}

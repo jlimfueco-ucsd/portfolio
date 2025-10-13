@@ -68,3 +68,33 @@ for (let p of pages) {
   li.appendChild(a);
   ul.appendChild(li);
 }
+
+// Lab 3.4.2 adding the dark mode switch
+document.body.insertAdjacentHTML(
+  'afterbegin',
+  `
+  <label class="color-scheme">
+    Theme:
+    <select id="theme-select">
+      <option value="auto">Automatic</option>
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+    </select>
+  </label>
+  `
+);
+
+const select = document.querySelector('#theme-select');
+
+select.addEventListener('input', (event) => {
+  const newTheme = event.target.value;
+  console.log('color scheme changed to', newTheme);
+
+  if (newTheme === 'auto') {
+    // Remove manual override → return to CSS default (light/dark follows OS)
+    document.documentElement.style.removeProperty('color-scheme');
+  } else {
+    // Force the selected scheme
+    document.documentElement.style.setProperty('color-scheme', newTheme);
+  }
+});
