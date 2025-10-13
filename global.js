@@ -120,3 +120,42 @@ setTheme(localStorage.getItem('colorScheme') || 'auto'); // load in theme
 //     document.documentElement.style.setProperty('color-scheme', newTheme);
 //   }
 // });
+
+
+// Lab 3.5 email form stuff. Stuff because it's a lot
+
+const form = document.querySelector('form');
+form?.addEventListener('submit', (e) => {
+  e.preventDefault(); // stop default mailto submission
+
+  const data = new FormData(form);
+
+  let fromEmail = '';
+  let subject = '';
+  let body = '';
+
+  for (let [name, value] of data) {
+    if (!value) continue;
+
+    if (name === 'email') {
+      fromEmail = value;
+    } else if (name === 'subject') {
+      subject = value;
+    } else if (name === 'message') {
+      body = value;
+    } else {
+      body += (body ? '\n' : '') + `${name}: ${value}`;
+    }
+  }
+
+  if (fromEmail) {
+    body = `From: ${fromEmail}\n\n` + body;
+  }
+
+  const url =
+    `${form.action}?` +
+    `subject=${encodeURIComponent(subject || '')}` +
+    `&body=${encodeURIComponent(body || '')}`;
+
+  location.href = url;
+});
