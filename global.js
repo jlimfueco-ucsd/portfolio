@@ -84,17 +84,39 @@ document.body.insertAdjacentHTML(
   `
 );
 
+// Lab 3.4.4 enforce the switch and make the theme swap
+// Lab 3.4.5 we add root to the mix, and change up some of the logic using a function
+
 const select = document.querySelector('#theme-select');
+const root = document. documentElement;
 
-select.addEventListener('input', (event) => {
-  const newTheme = event.target.value;
-  console.log('color scheme changed to', newTheme);
+// function logic, keeping original work below it from 3.4.4
 
-  if (newTheme === 'auto') {
-    // Remove manual override → return to CSS default (light/dark follows OS)
-    document.documentElement.style.removeProperty('color-scheme');
+function setTheme(mode) {
+  if (mode === 'auto') {
+    root.style.removeProperty('color-scheme'); // 'auto' choice
   } else {
-    // Force the selected scheme
-    document.documentElement.style.setProperty('color-scheme', newTheme);
+    root.style.setProperty('color-scheme', mode); // 'light' | 'dark'
   }
-});
+  localStorage.setItem('colorScheme', mode); // persistant choice
+  select.value = mode;
+  console.log('color scheme changed to', mode);
+}
+
+// use function to react to the helper function
+select.addEventListener('input', (e) => setTheme(e.target.value));  // active script to listen in memory
+setTheme(localStorage.getItem('colorScheme') || 'auto'); // load in theme
+
+// Lab 3.4.4 logic but no saved state
+// select.addEventListener('input', (event) => {
+//   const newTheme = event.target.value;
+//   console.log('color scheme changed to', newTheme);
+
+//   if (newTheme === 'auto') {
+//     // make AUTO actually work
+//     document.documentElement.style.removeProperty('color-scheme');
+//   } else {
+//     // Force the selected scheme
+//     document.documentElement.style.setProperty('color-scheme', newTheme);
+//   }
+// });
