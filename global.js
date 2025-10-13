@@ -44,14 +44,27 @@ let ul = document.createElement('ul');
 nav.appendChild(ul);
 document.body.prepend(nav);
 
+// NOTE: lab 3 provided a insertAdjacentHTML code, i didn't use that and use prior url appending knowing because 
+// hardcoding isn't future proof.
 for (let p of pages) {
-  let url = p.url.startsWith('http') ? p.url : BASE_PATH + p.url;
+  let url = p.url.startsWith('http') ? p.url : BASE_PATH + p.url; 
   let li = document.createElement('li');
   let a  = document.createElement('a');
   a.href = url;
   a.textContent = p.title;
+
+  // Lab 3.3.2 most of it is url sanity checks and adding functions to particular links
+  a.classList.toggle(
+  'current',
+  a.host === location.host && a.pathname === location.pathname,
+  );
+  // open external links in new tab with the a.target
+  const isExternal = a.host !== location.host;
+  if (isExternal) {
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer'; // this is very much a security vulnerability tldr sever realtions to my portfolio site leading into the github
+  }
+  
   li.appendChild(a);
   ul.appendChild(li);
 }
-
-// Lab 3.3.2
