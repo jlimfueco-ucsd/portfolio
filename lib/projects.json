@@ -47,16 +47,19 @@
     {
         "title": "Expedita ullam ducimus mollitia!",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Officiis reprehenderit, recusandae ab rerum sit, voluptatem odio non dolorum explicabo vitae magnam praesentium error provident illum, dolore enim hic nisi quis consequuntur. Dolores ea et placeat aliquid magni dignissimos?"
+        "description": "Officiis reprehenderit, recusandae ab rerum sit, voluptatem odio non dolorum explicabo vitae magnam praesentium error provident illum, dolore enim hic nisi quis consequuntur. Dolores ea et placeat aliquid magni dignissimos?",
+        "hidden": true
     },
     {
         "title": "Repellat porro perferendis minus.",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Ex numquam dolores perferendis cupiditate laudantium sunt deserunt expedita veritatis neque delectus rerum aspernatur cumque voluptatum vel adipisci debitis impedit reiciendis sequi eius illo error, nesciunt iste. Nostrum, ipsam sequi!"
+        "description": "Ex numquam dolores perferendis cupiditate laudantium sunt deserunt expedita veritatis neque delectus rerum aspernatur cumque voluptatum vel adipisci debitis impedit reiciendis sequi eius illo error, nesciunt iste. Nostrum, ipsam sequi!",
+        "hidden": true
     },
     {
         "title": "Voluptas corrupti asperiores dolore!",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Omnis facere, voluptatum magni accusamus molestias, ea excepturi, quam eaque esse asperiores quae rem suscipit. Quaerat odio hic, pariatur vitae temporibus dolorum possimus nemo quos dicta, eius voluptates nostrum omnis."
+        "description": "Omnis facere, voluptatum magni accusamus molestias, ea excepturi, quam eaque esse asperiores quae rem suscipit. Quaerat odio hic, pariatur vitae temporibus dolorum possimus nemo quos dicta, eius voluptates nostrum omnis.",
+        "hidden": true
     }
 ]
