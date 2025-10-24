@@ -21,6 +21,32 @@ export async function fetchJSON(url) {
   }
 }
 
+// Lab 4.1.4 — add the heading level
+export function renderProjects(projects, containerElement, headingLevel = 'h2') {
+  // 4.1.4.2 – clear container
+  containerElement.innerHTML = '';
+
+  // 4.1.4.6 – validate heading
+  const level = String(headingLevel).toLowerCase();
+  const valid = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
+  const tag = valid.has(level) ? level : 'h2';
+
+  // 4.1.4.3 – loop through projects
+  for (const p of projects) {
+    const article = document.createElement('article');
+
+    // 4.1.4.4 – fill each article with project data
+    article.innerHTML = `
+      <${tag}>${p.title}</${tag}>
+      <img src="${p.image}" alt="${p.title}">
+      <p>${p.description}</p>
+    `;
+
+    // 4.1.4.5 – append article to container
+    containerElement.appendChild(article);
+  }
+}
+
 
 
 
