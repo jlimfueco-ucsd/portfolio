@@ -1,5 +1,5 @@
 // Lab 2.1.2
-import { fetchJSON, renderProjects, fetchGithubData } from './global.js';
+import { fetchJSON, renderProjects } from './global.js';
 
 // Lab 2.1.3
 const projects = await fetchJSON('./lib/projects.json');
@@ -10,3 +10,4 @@ const projectsContainer = document.querySelector('.projects');
 
 // Lab 2.1.5
 renderProjects(latestProjects, projectsContainer, 'h2');
+
