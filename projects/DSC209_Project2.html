@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Project 2 Report</title>
+    <style>
+      :root {
+        --color-neutral-95: hsl(220 10% 95%);
+        --color-neutral-90: hsl(220 10% 90%);
+        --color-neutral-80: hsl(220 10% 80%);
+        --color-neutral-70: hsl(220 10% 70%);
+        --color-neutral-60: hsl(220 10% 60%);
+        --color-neutral-50: hsl(220 10% 50%);
+        --color-neutral-40: hsl(220 10% 40%);
+        --color-neutral-30: hsl(220 10% 30%);
+        --color-neutral-20: hsl(220 10% 20%);
+        --color-neutral-10: hsl(220 10% 10%);
+      }
+
+      html {
+        font: 100%/1.5 system-ui;
+        counter-reset: figure;
+        background: var(--color-neutral-95);
+        max-width: min(75vw, 80em);
+        margin: 0 auto;
+      }
+
+      /* Headings */
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        line-height: 1.1;
+        font-weight: 600;
+        text-wrap: balance;
+      }
+
+      h1,
+      h2 {
+        border-bottom: 1px solid var(--color-neutral-80);
+        padding-bottom: 0.2em;
+      }
+
+      h1 {
+        margin-block: 1em 0.5rem;
+        font-size: clamp(2.5em, 150% + 2vh + 2vw, 10vmin);
+        font-weight: 800;
+
+        small {
+          display: block;
+          width: fit-content;
+          padding: 0.2em 0.5em;
+          margin-inline: auto;
+          color: white;
+          background: var(--color-neutral-40);
+          font-size: 40%;
+          text-transform: uppercase;
+          white-space: nowrap;
+        }
+      }
+
+      h2 {
+        font-size: 180%;
+        color: var(--color-neutral-30);
+      }
+
+      h3 {
+        font-size: 130%;
+      }
+
+      /* Lists */
+
+      ul,
+      ol {
+        padding-inline-start: 2em;
+      }
+
+      li {
+        &::marker {
+          color: var(--color-neutral-40);
+        }
+
+        + li {
+          margin-top: 0.2em;
+        }
+      }
+
+      /* Sectioning elements */
+
+      header {
+        padding-block: 1em;
+        text-align: center;
+      }
+
+      main {
+        background: white;
+        color: var(--color-neutral-20);
+        border-radius: 1rem;
+        padding: 0.1rem 2rem;
+      }
+
+      /* Figures */
+
+      figure {
+        margin: 1em 0;
+        padding: 0.5rem;
+        margin-inline: -0.5em;
+        border: 1px solid var(--color-neutral-80);
+        box-shadow: 0 0.1em 0.2em var(--color-neutral-95);
+        text-align: center;
+        background: white;
+
+        > figcaption {
+          font: 500 75% var(--font-sans);
+          background: var(--color-neutral-95);
+          padding: 0.5rem;
+          margin: -0.5rem;
+          margin-top: 0.5rem;
+          counter-increment: figure;
+          text-align: left;
+
+          &::before {
+            content: 'Figure ' counter(figure) ': ';
+            font-weight: bold;
+            color: var(--color-neutral-40);
+          }
+
+          a:not(:hover, :focus, :active) {
+            color: inherit;
+            text-decoration: underline;
+            text-decoration-color: color-mix(
+              in lab,
+              currentColor,
+              transparent 70%
+            );
+          }
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>
+        <small>PROJECT 2:</small>
+        Persuasive or Deceptive Visualization?
+      </h1>
+
+      <p><strong>Jason Limfueco</strong> — <em>julimfueco@ucsd.edu</em></p>
+    </header>
+
+    <main>
+      <h2>Proposition: High Ranking Members of Service Receive Fewer Complaints!
+</h2>
+
+      <section>
+        <h3>FOR the Proposition</h3>
+
+        <figure>
+          <img src="../images/project2_A.jpg" alt="Depicted is a horizontal bar plot of Officer ranks and the total complaints recieved at that rank" />
+          <figcaption>Depicted is a horizontal bar plot of Officer ranks and the total complaints recieved at that rank.</figcaption>
+        </figure>
+
+        <p>Design Decisions and Rationale:</p>
+
+        <ul>
+          <li>Deception: -1</li>
+          <li>We transform the data in favor of our Proposition. Our goal is to persuade readers that over all, police officers and detectives are the reason for the majority of complaints. Let’s simply build a plot where we highlight the total amount of complaints per given rank.</li>
+          <li>Horizontal bar chart: MARK == bar, Y == rank, X == # of complaints– In addition, we’ve added a note to further persuade viewers, and topped the bars w/ their actual numerical values.</li>
+          <li> We’re misleading the witness because they’re going to be lacking the initial thoughts of how we got to this point. Empirically simple information is easy to spread and digest however…</li>
+          <li>This data is a bit obfuscated. We expressed the number of reports, but what of the ratio between Members of Service to reports? This would be a great use of a trellis plot (or not as 7 ranks vs X amount of officers is too tiny) to show some of the problem officers across ranks, however we’re just saying with this simple view and lack of context that police officers are a majority of the issue (problem is bottoms up)</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>AGAINST the Proposition</h3>
+
+        <figure>
+          <img src="../images/project2_B.jpg" alt="Depicted is a horizontal bar plot of problematic Members of Service whose total complaint count exceeds both preliminary metrics and 50 total complaints." />
+          <figcaption>Depicted is a horizontal bar plot of problematic Members of Service whose total complaint count exceeds both preliminary metrics and 50 total complaints.</figcaption>
+        </figure>
+
+        <p>Design Decisions and Rationale:</p>
+
+        <ul>
+          <li>Let’s refute the above argument with: Higher Ranking Members have higher total complaint counts!</li>
+          <li>Our goal here is to “cherry pick” members with high total complaints. We needed to isolate members by (name,rank) vs their complaints. I also calculated multiple averages (Overall, Ranks, etc).</li>
+          <li>Horizontal bar chart, Mark == bar, Y == (first name, last name) , X == # of complaints, Label == the rank of the officer (meant to show that higher ranking officers have more complaints). We also wanted to mark off the average amount of complaints at 8.35 complaints per officer. I have added in the average complaints per rank as well to further drive the point that these humans in particular are problematic.</li>
+          <li>Data is designed as another misleading persuasion tactic: we wanted readers to believe that we have higher ranking Members of Service who are high in complaint counts. This data lacks a time frame, and we enforce an assumption that ranking above Police Officer is always higher. DO NOTE: Detectives are adjacent to Police Officers. We’re enforcing an assumption held by relation between each graph.</li>
+          <li>Trellis Plot: I could have documented 35 Members via a trellis plot but the plot wouldn’t look good on a small scale. I thought of 5 high complaint members of the force but it’d be difficult to compare humans across an odd number (7) of plots. </li>
+          <li>Christophe Mccormack is ranked at Chief or higher, do you want a Member of Service in power with 70+ complaints? He accounts for 23% of Chief-rank complaints. The same may be said of William Taylor who accounts for 30% of total Inspector complaints.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Final Reflection</h2>
+
+        <p>	My design process for this project began with inspiration from ranking lists. Humans are competitive in nature and finding the best player of a game, food spot in my local area, or whether Kendrick Lamar still has a spot on the Billboard Top 100 is of natural, curious superiority– I want to see the best thing around. Now let’s flip the script and ask ourselves instead what are the worst representatives of those categories? The notion of worst, or bottom 10 is just as perceivable given the right inquiries. The challenge of finding the worst representation drove me to research the juxtaposition of “Good Cop, Bad Cop”: what can 10,000 complaints from a single police force teach us? This design process proved difficult because my personal goal was to reach levels of graphical representation akin to magazine, study, or academic media. What made the situation surprisingly simpler was how much more subtle the issues were. My focus on this assignment was to find misrepresentation in our data, but the examples that Sam had provided us in lecture showed how we can use data in the same visual format to prove a point. Such is the goal and case for what we handled in this project: prove that Members of Service do have less complaints in higher ranks, and then prove a point that such isn’t the case.</p>
+        <p>	Across both of my cases, there are major holes as to fit in line with our project deception. I stuck to strict facts our data could provide, but not all the facts hold full truths via omission. Supporting either of the propositions entailed handling a level of bias as we really want to push our narratives along on each side. I found this project a challenge for ethics and analysis as I believe that these practices go against my principles of integrity with the work I want to put out. I would like to define “ethical analysis and visualization” in my works as Humanitarian Beneficence: A promotion and presentation of human good-will and help. There is a difference between pushing a fake narrative, i.e. for lack of better vocabulary a white lie, and blatantly refusing to progress the truth with lies. As producers to these visual stories, instead of writing our understanding on this matter as black and white, I would rather err on the side of user skepticism. This concept does put me on making the bounds or goal post both a per viewer, subjective line in which it’s up to consumers of data to make a rational for themselves. Everything is acceptable until someone says otherwise. The ethics of our analysis and visualization should be open for discourse, and that’s how we can learn together.</p>
+      </section>
+    </main>
+  </body>
+</html>
