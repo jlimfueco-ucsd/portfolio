@@ -285,3 +285,42 @@ h2, h3, h4, h5, h6 {
   font: inherit;
   /* cursor: pointer; */
 }
+
+/* Styling the GITHUB GRID */
+/* === GitHub Stats Section === */
+#github-stats {
+  margin-top: 3rem;
+  /* text-align: center; */
+}
+
+#github-stats h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Make the <dl> grid-based with 4 equal columns */
+#github-stats dl {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: .5rem 1rem;
+  justify-items: center;
+}
+
+/* Label styling */
+#github-stats dt {
+  grid-row: 1;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  color: var(--color-neutral-70, #aaa);
+}
+
+/* Value styling */
+#github-stats dd {
+  grid-row: 2;
+  font-size: 2rem;
+  margin: 0;
+  font-weight: 700;
+  color: var(--color-neutral-10, #fff);
+}

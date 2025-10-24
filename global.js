@@ -47,6 +47,12 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
   }
 }
 
+// Lab 4.3.2
+export async function fetchGitHubData(username) {
+  if (!username) return {};
+  // Reuse fetchJSON as the lab suggests
+  return await fetchJSON(`https://api.github.com/users/${encodeURIComponent(username)}`);
+}
 
 
 
