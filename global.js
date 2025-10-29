@@ -34,14 +34,17 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
   // 4.1.4.3 – loop through projects
   for (const p of projects) {
     const article = document.createElement('article');
-
+    // // 5.0.1 add the years in
+    // article.setAttribute('data-year', p.year); DIDNT WORK for adding year instead added to article.innerHTML
     // 4.1.4.4 – fill each article with project data
     article.innerHTML = `
-      <${tag}>${p.title}</${tag}>
+      <div class="card-head">
+        <span class="year-pill">${p.year}</span>
+        <div class="project-title">${p.title}</div>  <!-- div instead of h2 -->
+      </div>
       <img src="${p.image}" alt="${p.title}">
       <p>${p.description}</p>
     `;
-
     // 4.1.4.5 – append article to container
     containerElement.appendChild(article);
   }
