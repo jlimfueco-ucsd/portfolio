@@ -4,7 +4,7 @@
         "year": "2025",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
         "description": "This is my analysis of Social Media Trends and Media Engagement. We're going to be going over data across different Media platforms, regions, and hashtags. This dataset was recently updated as of 3/9/2025 for use with trend analysis and influencer marketing, and the last major update before publishing this work is 3/28/2025. Data Science studies for such a topic are ubiquitous: finding the next big trend and market is always relevant to the influencer life. I want to deep dive into this data as it isn't just stuck to the US market, so please enjoy this notebook's exploration into the successes and failures of social media trends.",
-        "hidden": true
+        "hidden": false
     },
     {
         "title": "Multi-Trip Reconstruction",
@@ -81,13 +81,6 @@
         "year": "2025",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
         "description": "Omnis facere, voluptatum magni accusamus molestias, ea excepturi, quam eaque esse asperiores quae rem suscipit. Quaerat odio hic, pariatur vitae temporibus dolorum possimus nemo quos dicta, eius voluptates nostrum omnis.",
-        "hidden": false
-    },
-    {
-        "title": "Expedita ullam ducimus mollitia!",
-        "year": "2025",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Officiis reprehenderit, recusandae ab rerum sit, voluptatem odio non dolorum explicabo vitae magnam praesentium error provident illum, dolore enim hic nisi quis consequuntur. Dolores ea et placeat aliquid magni dignissimos?",
         "hidden": false
     }
 ]
