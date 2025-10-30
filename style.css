@@ -380,8 +380,91 @@ h2, h3, h4, h5, h6 {
 }
 
 /* LAB 5 begins for the pie chart and styling it */
-#projects-pie-plot {
-  max-width: 30vw;   /* ⬆ increase for a bigger chart */
-  margin-block: 2em;
-  overflow: visible;
+.projects-pie-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;     /* center contents horizontally */
+  gap: 1.5rem;
+  flex-wrap: wrap;             /* wrap when too narrow */
+  margin-block: 1rem 2rem;
+  max-width: 900px;            /* ⬅ limit total section width */
+  margin-inline: auto;         /* center the section on page */
 }
+
+#projects-pie-plot {
+  width: clamp(150px, 30vw, 400px); /* min 260px, max 400px */
+  aspect-ratio: 1 / 1;
+  display: block;
+  overflow: visible;
+  flex-shrink: 0;              /* prevent SVG from shrinking oddly */
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* lock to 2 columns */
+  gap: .5em 1em;
+  list-style: none;
+  padding: 1rem 1.25rem;           /* add inner spacing for border */
+  margin: 0;
+  font-size: 0.95rem;
+  max-width: 280px;
+  flex: 1 1 auto;
+
+  border: 1px solid rgba(255, 255, 255, 0.15); /* subtle border for dark mode */
+  border-radius: 8px;                          /* rounded corners */
+  background: rgba(255, 255, 255, 0.03);       /* faint background to separate from page */
+  backdrop-filter: blur(6px);                  /* optional frosted look */
+}
+
+/* Each legend item */
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-weight: 500;
+  color: var(--color-neutral-10, #fff); /* light text for dark bg */
+}
+
+/* Small color swatch box */
+.legend .swatch {
+  width: 1em;
+  height: 1em;
+  border-radius: 3px;
+  background: var(--color);
+  flex-shrink: 0;               /* prevent resizing in flexbox */
+}
+
+/* Optional: subtle hover interaction for accessibility */
+.legend li:hover .swatch {
+  outline: 2px solid var(--color-neutral-5, #ddd);
+  outline-offset: 2px;
+}
+
+/* 2 column legend */
+@media (max-width: 700px) {
+  .legend { grid-template-columns: 1fr; }
+}
+
+/* System light mode for legend */
+/* 0) Make legend items inherit the container's color */
+.legend li,
+.legend li em { color: inherit !important; }
+
+/* 1) System light mode */
+@media (prefers-color-scheme: light) {
+  .legend { border-color: rgba(0,0,0,.15); background: rgba(0,0,0,.04); }
+  .legend, .legend * { color: #111 !important; }
+  #projects-pie-plot path { stroke: rgba(0,0,0,.18); }
+}
+
+/* 2) Manual toggle via data attribute */
+html[data-theme="light"] .legend { border-color: rgba(0,0,0,.15); background: rgba(0,0,0,.04); }
+html[data-theme="light"] .legend, 
+html[data-theme="light"] .legend * { color: #111 !important; }
+html[data-theme="light"] #projects-pie-plot path { stroke: rgba(0,0,0,.18); }
+
+/* 3) Inline color-scheme set by global.js (e.g., document.documentElement.style.colorScheme='light') */
+html[style*="color-scheme: light"] .legend { border-color: rgba(0,0,0,.15); background: rgba(0,0,0,.04); }
+html[style*="color-scheme: light"] .legend, 
+html[style*="color-scheme: light"] .legend * { color: #111 !important; }
+html[style*="color-scheme: light"] #projects-pie-plot path { stroke: rgba(0,0,0,.18); }
