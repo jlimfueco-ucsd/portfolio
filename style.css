@@ -378,3 +378,10 @@ h2, h3, h4, h5, h6 {
   font-weight: 700;
   color: var(--color-neutral-10, #fff);
 }
+
+/* LAB 5 begins for the pie chart and styling it */
+#projects-pie-plot {
+  max-width: 30vw;   /* ⬆ increase for a bigger chart */
+  margin-block: 2em;
+  overflow: visible;
+}
