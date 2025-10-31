@@ -520,3 +520,25 @@ html[data-theme="light"] .searchBar::placeholder,
 html[style*="color-scheme: light"] .searchBar::placeholder {
   color: rgba(0, 0, 0, 0.45);
 }
+
+
+/* LAB 5.5.1 set up the highlight for wedges */
+#projects-pie-plot:has(path:hover) path:not(:hover) {
+  opacity: 0.5;
+}
+
+/* --- Lab 5.5.2: selectable wedge --- */
+:root { --selected-color: oklch(82.274% 0.16132 76.812); } /* tweak if you like */
+
+#projects-pie-plot path.slice { cursor: pointer; transition: opacity .15s, transform .15s; }
+
+/* Make the selected wedge visually distinct. The !important beats inline fill. */
+#projects-pie-plot path.slice.selected { fill: var(--selected-color) !important; }
+
+.legend-item.selected {
+  font-weight: 700;
+  outline: 2px solid var(--selected-color);
+  outline-offset: 2px;
+  border-radius: .5rem;
+}
+

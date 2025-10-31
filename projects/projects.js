@@ -119,7 +119,7 @@ const COOL_COLORS = (function () {
 
 // expose as a global so other functions reuse it
 window.colors = COOL_COLORS;   // colors(year) -> hex
-
+window.state = window.state || { q: '', year: null };
 
 // Lab 5.4.5
 // Uses #projects-pie-plot (viewBox) and ul.legend
@@ -162,12 +162,48 @@ function renderPieChart(projectsGiven) {
      .attr('stroke', 'rgba(255,255,255,0.2)')
      .attr('stroke-width', 0.5);
 
-  // 6) legend: bind <li> directly to your UL
+  // 5) Clear and rebuild arcs
+  svg.selectAll('*').remove();
+  svg.append('g')
+    .attr('class', 'pie-arcs')
+    .attr('transform', `translate(0,0)`)
+    .selectAll('path')
+    .data(pie(counts), d => d.data.year)
+    .join('path')
+      .attr('class', 'slice')                    // <-- ADD THIS
+      .attr('d', arc)
+      .attr('fill', d => color(d.data.year))
+      .attr('stroke', 'rgba(255,255,255,0.2)')
+      .attr('stroke-width', 0.5);
+
+  // --- 5.5.2: click-to-select---
+  if (!window.state) window.state = {};
+  if (!('year' in state)) state.year = null;
+
+  svg.selectAll('path.slice').on('click', (event, d) => {
+    const y = d?.data?.year;
+    state.year = (String(state.year) === String(y)) ? null : y;
+
+    svg.selectAll('path.slice')
+      .classed('selected', s => state.year && String(s.data.year) === String(state.year));
+
+    d3.selectAll('.legend li.legend-item')
+      .classed('selected', li => {
+        const yr = (li && typeof li === 'object' && 'year' in li) ? li.year : li;
+        return state.year && String(yr) === String(state.year);
+      });
+
+    // (later) hook this into your combined filter:
+    // applySearch();
+  });
+
+  // 6) Legend: bind <li> directly to your UL
   legendUL
     .selectAll('li')
     .data(counts, d => d.year)
     .join(
       enter => enter.append('li')
+        .attr('class', 'legend-item')            // <-- ADD THIS
         .attr('style', d => `--color:${color(d.year)}`)
         .html(d => `
           <span class="swatch"></span>
@@ -175,6 +211,7 @@ function renderPieChart(projectsGiven) {
           <em class="legend-count">(${d.count})</em>
         `),
       update => update
+        .attr('class', 'legend-item')            // <-- AND HERE
         .attr('style', d => `--color:${color(d.year)}`)
         .html(d => `
           <span class="swatch"></span>
@@ -183,6 +220,7 @@ function renderPieChart(projectsGiven) {
         `),
       exit => exit.remove()
     );
+    // end 5.5.2 / 5.5.3 work
 }
 
 
@@ -202,11 +240,11 @@ function applySearch(v) {
   renderPieChart(filtered);
 }
 
+
+
 const searchInput = document.querySelector('.searchBar');
 searchInput.addEventListener('input',  e => applySearch(e.target.value));
 searchInput.addEventListener('search', e => applySearch(e.target.value));
 
 renderPieChart(projects);
 
-
-// LAB 5.5 THE WEDGE HIGHLIGHT
