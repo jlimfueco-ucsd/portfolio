@@ -85,6 +85,7 @@ svg.selectAll('path')
   .data(arcs)
   .join('path')
   .attr('d', arc)
+  .attr('data-year', d => String(d.data.key))
   .style('fill', (_, i) => color(i))   // <-- force inline fill style
   .attr('stroke', 'rgba(255,255,255,0.2)') // lighter border for dark bg
   .attr('stroke-width', 0.5);
@@ -92,17 +93,17 @@ svg.selectAll('path')
 // Lab 5.2/5.3 Legend
 const legend = d3.select('.legend');
 
-legend
+// Legend section
+const legendUL = legend
   .selectAll('li')
-  .data(pie(data)) // reuse same data used for pie arcs
+  .data(pie(data))
   .join('li')
-  .attr('style', (_, i) => `--color:${color(i)}`)
+  .attr('class', 'legend-item')
+  .attr('style', (d, i) => `--color:${color(i)}`)
   .html(d => `
     <span class="swatch"></span>
     ${d.data.year} <em>(${d.data.value})</em>
   `);
-
-
 // STILL LAB 5.4.4 WORK
 // Sticky colors per year using d3.interpolateCool
 // Build the domain from ALL years in the full dataset, sorted.
@@ -192,6 +193,8 @@ function renderPieChart(projectsGiven) {
         const yr = (li && typeof li === 'object' && 'year' in li) ? li.year : li;
         return state.year && String(yr) === String(state.year);
       });
+    
+    applySearch(state.q || '');
 
     // (later) hook this into your combined filter:
     // applySearch();
@@ -227,20 +230,29 @@ function renderPieChart(projectsGiven) {
 // Lab 5.4 Search Bar
 // --- Live search (title OR description) + re-render pie ---
 function applySearch(v) {
-  const q = (v || '').trim().toLowerCase();
-  const filtered = q
-    ? projects.filter(p =>
-        (p.title || '').toLowerCase().includes(q) ||
-        (p.description || '').toLowerCase().includes(q)
-        // (p.year || '').toLowerCase().includes(q)
-      )
-    : projects;
+  // keep query in state so clicks can reuse it
+  state.q = (v || '').trim().toLowerCase();
+
+  // always start from visible projects
+  let filtered = projects.filter(p => !p.hidden);
+
+  // YEAR filter first (from wedge/legend)
+  if (state.year) {
+    filtered = filtered.filter(p => String(p.year) === String(state.year));
+  }
+
+  // SEARCH filter (title OR description)
+  if (state.q) {
+    filtered = filtered.filter(p => {
+      const t = (p.title || '').toLowerCase();
+      const d = (p.description || '').toLowerCase();
+      return t.includes(state.q) || d.includes(state.q);
+    });
+  }
 
   renderProjects(filtered, projectsContainer, 'h2');
-  renderPieChart(filtered);
+  renderPieChart(filtered); // keeps the pie/legend in sync with filtered cards
 }
-
-
 
 const searchInput = document.querySelector('.searchBar');
 searchInput.addEventListener('input',  e => applySearch(e.target.value));
@@ -248,3 +260,116 @@ searchInput.addEventListener('search', e => applySearch(e.target.value));
 
 renderPieChart(projects);
 
+// === Initialization / Fix first-load interaction ===
+function initProjectsPage() {
+  const search = document.querySelector('.searchBar');
+
+  // 1) Hook up search bar once
+  if (search && !search.dataset.bound) {
+    const onType = () => applySearch(search.value || '');
+    search.addEventListener('input', onType);
+    search.addEventListener('search', onType);
+    search.dataset.bound = '1';
+  }
+
+  // 2) Initial render (cards + pie)
+  renderProjects(projects, projectsContainer, 'h2');
+  renderPieChart(projects);
+  syncSelectionUI(); // ensure highlight syncs on first paint
+}
+
+// Wait for DOM if needed
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initProjectsPage);
+} else {
+  initProjectsPage(); // for deferred scripts
+}
+
+// === Lab 5.5.3 — 
+// state
+let selectedYear = null; // null means "no year filter"
+
+// helpers
+const $projectsGrid = document.querySelector('.projects');
+const $search = document.querySelector('.searchBar');
+
+function getQuery() {
+  return ($search?.value || '').trim().toLowerCase();
+}
+
+// core filter → render
+function applyFilters() {
+  // start from visible projects only
+  let list = projectsData.filter(p => !p.hidden);
+
+  // year filter (if any)
+  if (selectedYear) {
+    list = list.filter(p => String(p.year) === String(selectedYear));
+  }
+
+  // search filter (title OR description)
+  const q = getQuery();
+  if (q) {
+    list = list.filter(p => {
+      const t = (p.title || '').toLowerCase();
+      const d = (p.description || '').toLowerCase();
+      return t.includes(q) || d.includes(q);
+    });
+  }
+
+  renderProjects(list); // reuse your existing renderer
+}
+
+// guard so we don’t double-bind if you hot-reload
+if ($search && !$search.dataset.hasFilterHandler) {
+  $search.addEventListener('input', applyFilters);
+  $search.dataset.hasFilterHandler = '1';
+}
+
+// sync UI selection styles for wedges + legend
+function syncSelectionUI() {
+  // wedges
+  d3.selectAll('#projects-pie-plot path.slice')
+    .classed('selected', function () {
+      const y = this.getAttribute('data-year');
+      return selectedYear && y === String(selectedYear);
+    });
+
+  // legend
+  d3.selectAll('.legend .legend-item')
+    .classed('selected', function () {
+      const y = this.getAttribute('data-year');
+      return selectedYear && y === String(selectedYear);
+    });
+}
+
+// wedge click → toggle year → filter
+d3.selectAll('#projects-pie-plot path.slice')
+  .on('click', function (event, d) {
+    const y = this.getAttribute('data-year');
+    selectedYear = (selectedYear === y) ? null : y;
+    syncSelectionUI();
+    applyFilters();
+  });
+
+// legend click (optional, feels nice)
+d3.selectAll('.legend .legend-item')
+  .on('click', function () {
+    const y = this.getAttribute('data-year');
+    selectedYear = (selectedYear === y) ? null : y;
+    syncSelectionUI();
+    applyFilters();
+  });
+
+// (nice-to-have) click empty space in SVG clears selection
+d3.select('#projects-pie-plot')
+  .on('click', function (e) {
+    if (e.target.tagName.toLowerCase() !== 'path') {
+      selectedYear = null;
+      syncSelectionUI();
+      applyFilters();
+    }
+  });
+
+// initial render respects empty filters
+applyFilters();
