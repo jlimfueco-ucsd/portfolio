@@ -59,7 +59,6 @@ if (titleElement) {
 
 // D3 LAB 5 
 // Use the same array you render with (prefer visible-only)
-
 const source = (typeof visibleProjects !== 'undefined')
   ? visibleProjects
   : projects.filter(p => !p.hidden);
@@ -104,4 +103,107 @@ legend
   `);
 
 
+// STILL LAB 5.4.4 WORK
+// Sticky colors per year using d3.interpolateCool
+// Build the domain from ALL years in the full dataset, sorted.
+const BASE_YEARS = Array.from(new Set(projects.map(p => +p.year))).sort(d3.ascending);
+
+// Map each year to a position in [0,1] along interpolateCool.
+const COOL_COLORS = (function () {
+  const n = BASE_YEARS.length;
+  const stops = BASE_YEARS.map((_, i) => (n === 1 ? 0.5 : i / (n - 1)));
+  return d3.scaleOrdinal()
+    .domain(BASE_YEARS)
+    .range(stops.map(t => d3.interpolateCool(t)));
+})();
+
+// expose as a global so other functions reuse it
+window.colors = COOL_COLORS;   // colors(year) -> hex
+
+
+// Lab 5.4.5
+// Uses #projects-pie-plot (viewBox) and ul.legend
+function renderPieChart(projectsGiven) {
+  const svg = d3.select('#projects-pie-plot');   // your <svg id="projects-pie-plot">
+  const legendUL = d3.select('ul.legend');       // your <ul class="legend">
+  if (svg.empty()) return;
+
+  // 1) roll up -> [{year, count}]
+  const counts = d3.rollups(projectsGiven, v => v.length, d => d.year)
+    .map(([year, count]) => ({ year: +year, count }))
+    .sort((a, b) => d3.ascending(a.year, b.year));  // <-- FIX: use a.year, b.year
+
+  // 2) read viewBox for sizing
+  const vb = svg.node().viewBox?.baseVal;
+  const w = (vb && vb.width)  || 100;
+  const h = (vb && vb.height) || 100;
+  const r = Math.min(w, h) / 2;
+
+  // 3) color scale (reuse your global if present)
+  const color = window.colors ?? window.color ?? d3.scaleOrdinal(d3.schemeTableau10);
+
+  // 4) pie layout + arc
+  const pie = d3.pie()
+    .value(d => d.count)
+    .sort((a, b) => d3.ascending(a.year, b.year));   // <-- FIX here too (sort comparator for data)
+
+  const arc = d3.arc().innerRadius(0).outerRadius(r);
+
+  // 5) clear and rebuild arcs
+  svg.selectAll('*').remove();
+  svg.append('g')
+     .attr('class', 'pie-arcs')
+     .attr('transform', `translate(0,0)`)            // viewBox centered at (0,0)
+     .selectAll('path')
+     .data(pie(counts), d => d.data.year)
+     .join('path')
+     .attr('d', arc)
+     .attr('fill', d => color(d.data.year))
+     .attr('stroke', 'rgba(255,255,255,0.2)')
+     .attr('stroke-width', 0.5);
+
+  // 6) legend: bind <li> directly to your UL
+  legendUL
+    .selectAll('li')
+    .data(counts, d => d.year)
+    .join(
+      enter => enter.append('li')
+        .attr('style', d => `--color:${color(d.year)}`)
+        .html(d => `
+          <span class="swatch"></span>
+          <span class="legend-year">${d.year}</span>
+          <em class="legend-count">(${d.count})</em>
+        `),
+      update => update
+        .attr('style', d => `--color:${color(d.year)}`)
+        .html(d => `
+          <span class="swatch"></span>
+          <span class="legend-year">${d.year}</span>
+          <em class="legend-count">(${d.count})</em>
+        `),
+      exit => exit.remove()
+    );
+}
+
+
 // Lab 5.4 Search Bar
+// --- Live search (title OR description) + re-render pie ---
+function applySearch(v) {
+  const q = (v || '').trim().toLowerCase();
+  const filtered = q
+    ? projects.filter(p =>
+        (p.title || '').toLowerCase().includes(q) ||
+        (p.description || '').toLowerCase().includes(q) ||
+        (p.year || '').toLowerCase().includes(q)
+      )
+    : projects;
+
+  renderProjects(filtered, projectsContainer, 'h2');
+  renderPieChart(filtered);
+}
+
+const searchInput = document.querySelector('.searchBar');
+searchInput.addEventListener('input',  e => applySearch(e.target.value));
+searchInput.addEventListener('search', e => applySearch(e.target.value));
+
+renderPieChart(projects);
