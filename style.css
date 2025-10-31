@@ -468,3 +468,55 @@ html[style*="color-scheme: light"] .legend { border-color: rgba(0,0,0,.15); back
 html[style*="color-scheme: light"] .legend, 
 html[style*="color-scheme: light"] .legend * { color: #111 !important; }
 html[style*="color-scheme: light"] #projects-pie-plot path { stroke: rgba(0,0,0,.18); }
+
+/* LAB 5 the Search bar */
+/* === Search bar === */
+.searchBar {
+  width: 100%;
+  max-width: 900px;
+  display: block;
+  margin: 0.75rem auto 2rem;
+  box-sizing: border-box;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  font: 16px/1.2 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.searchBar::placeholder {
+  color: rgba(200, 200, 200, 0.8);
+}
+
+.searchBar:focus {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
+/* === Light mode: system or site toggle === */
+@media (prefers-color-scheme: light) {
+  .searchBar {
+    background: #fff;
+    border-color: rgba(0, 0, 0, 0.15);
+    color: #000;
+  }
+  .searchBar::placeholder {
+    color: rgba(0, 0, 0, 0.45);
+  }
+}
+
+/* manual theme toggling support (via data-theme or inline color-scheme) */
+html[data-theme="light"] .searchBar,
+html[style*="color-scheme: light"] .searchBar {
+  background: #fff;
+  border-color: rgba(0, 0, 0, 0.15);
+  color: #000;
+}
+
+html[data-theme="light"] .searchBar::placeholder,
+html[style*="color-scheme: light"] .searchBar::placeholder {
+  color: rgba(0, 0, 0, 0.45);
+}

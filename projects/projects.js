@@ -16,6 +16,7 @@ const visibleProjects = projects.filter(p => !p.hidden);
 // Lab 4.1.3.5
 renderProjects(visibleProjects, projectsContainer, 'h2');
 
+
 // Lab 4.1.6 – Count projects and update the title
 const titleElement = document.querySelector('.projects-title');
 if (titleElement) {
@@ -58,6 +59,7 @@ if (titleElement) {
 
 // D3 LAB 5 
 // Use the same array you render with (prefer visible-only)
+
 const source = (typeof visibleProjects !== 'undefined')
   ? visibleProjects
   : projects.filter(p => !p.hidden);
@@ -88,7 +90,7 @@ svg.selectAll('path')
   .attr('stroke', 'rgba(255,255,255,0.2)') // lighter border for dark bg
   .attr('stroke-width', 0.5);
 
-// Lab 5.2 legend
+// Lab 5.2/5.3 Legend
 const legend = d3.select('.legend');
 
 legend
@@ -100,3 +102,6 @@ legend
     <span class="swatch"></span>
     ${d.data.year} <em>(${d.data.value})</em>
   `);
+
+
+// Lab 5.4 Search Bar
