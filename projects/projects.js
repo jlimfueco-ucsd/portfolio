@@ -193,8 +193,8 @@ function applySearch(v) {
   const filtered = q
     ? projects.filter(p =>
         (p.title || '').toLowerCase().includes(q) ||
-        (p.description || '').toLowerCase().includes(q) ||
-        (p.year || '').toLowerCase().includes(q)
+        (p.description || '').toLowerCase().includes(q)
+        // (p.year || '').toLowerCase().includes(q)
       )
     : projects;
 
@@ -207,3 +207,6 @@ searchInput.addEventListener('input',  e => applySearch(e.target.value));
 searchInput.addEventListener('search', e => applySearch(e.target.value));
 
 renderPieChart(projects);
+
+
+// LAB 5.5 THE WEDGE HIGHLIGHT
