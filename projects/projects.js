@@ -271,12 +271,11 @@ function initProjectsPage() {
     search.addEventListener('search', onType);
     search.dataset.bound = '1';
   }
-
   // 2) Initial render (cards + pie)
   renderProjects(projects, projectsContainer, 'h2');
   renderPieChart(projects);
   syncSelectionUI(); // ensure highlight syncs on first paint
-}
+}d3.select
 
 // Wait for DOM if needed
 if (document.readyState === 'loading') {
@@ -288,15 +287,12 @@ if (document.readyState === 'loading') {
 // === Lab 5.5.3 — 
 // state
 let selectedYear = null; // null means "no year filter"
-
 // helpers
 const $projectsGrid = document.querySelector('.projects');
 const $search = document.querySelector('.searchBar');
-
 function getQuery() {
   return ($search?.value || '').trim().toLowerCase();
 }
-
 // core filter → render
 function applyFilters() {
   // start from visible projects only
