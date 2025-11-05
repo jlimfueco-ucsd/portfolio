@@ -83,6 +83,7 @@ let pages = [
   { url: 'projects/', title: 'Projects' },
   { url: 'contact/',  title: 'Contact' },
   { url: 'https://github.com/jlimfueco-ucsd', title: 'Profile' }, // actual URL
+  { url: 'meta/', title: 'Meta'},
   { url: 'resume/',   title: 'Resume' }
 ];
 
