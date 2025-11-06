@@ -614,3 +614,15 @@ html[style*="color-scheme: light"] .searchBar::placeholder {
   border-radius: .5rem;
 }
 
+ 
+/*LAB 6.2 plots */
+/* === Lab 6.2 — scatterplot gridlines === */
+.gridlines line {
+  stroke: var(--color-neutral-70, #999);
+  stroke-opacity: 0.7;   /* make them faint */
+  stroke-width: 2;
+}
+
+.gridlines path {
+  stroke: none; /* remove the domain line */
+}
