@@ -1,3 +1,2 @@
 # git ignores the loc.csv for committing
 meta/loc.csv
-loc.csv
