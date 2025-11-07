@@ -1,5 +1,17 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
+// 6.5.1
+// === 6.5 Setup ===
+const margin = { top: 20, right: 20, bottom: 40, left: 48 };
+const width  = 800, height = 420;
+
+const svg = d3.select('#chart').selectAll('svg').data([null]).join('svg')
+  .attr('width', width)
+  .attr('height', height);
+
+const x = d3.scaleLinear().range([margin.left, width - margin.right]);
+const y = d3.scaleLinear().range([height - margin.bottom, margin.top]);
+
 // 6.1.1
 async function loadData() {
   const data = await d3.csv('../loc.csv', (row) => ({
@@ -84,6 +96,17 @@ function renderCommitInfo(data, commits = []) {
   // optional: quick sanity log
   console.log('meta stats →', { commitsCount, filesCount, totalLOC, maxDepth, longestLine, maxLines, LINES_BY_COMMIT });
 }
+
+
+// Keep SVG z-order predictable: grid < dots < brush < axes
+function createLayers(svg) {
+  const gGrid  = svg.selectAll('g.grid').data([null]).join('g').attr('class','grid');
+  const gDots  = svg.selectAll('g.dots').data([null]).join('g').attr('class','dots');
+  const gBrush = svg.selectAll('g.brush').data([null]).join('g').attr('class','brush');
+  const gAxes  = svg.selectAll('g.axes').data([null]).join('g').attr('class','axes');
+  return { gGrid, gDots, gBrush, gAxes };
+}
+
 
 function renderScatterPlot(rows, commits) {
   const margin = { top: 10, right: 10, bottom: 30, left: 40 };
@@ -256,6 +279,7 @@ function renderScatterPlot(rows, commits) {
       d3.select(event.currentTarget).style('fill-opacity', 0.7);
       hideTip();
     });
+
 }
 
 function renderTooltipContent(commit) {
@@ -317,34 +341,143 @@ function renderTooltipContent(commit) {
 }
 
 
+// === 6.5 — brush overlay UNDER dots (hover always works), reusable forever
+function addBrushOverlay() {
+  const svg = d3.select('#chart').select('svg');
+  if (svg.empty()) return;
+
+  // resolve drawing size
+  let W, H;
+  const vb = svg.attr('viewBox');
+  if (vb) { const p = vb.trim().split(/\s+/).map(Number); W = p[2]; H = p[3]; }
+  else { W = +svg.attr('width'); H = +svg.attr('height'); }
+
+  const M = (typeof margin === 'object') ? margin : { left: 40, right: 20, top: 10, bottom: 30 };
+
+  // ensure standard layers exist
+  const gGrid  = svg.selectAll('g.gridlines').data([null]).join('g').attr('class','gridlines');
+  const gDots  = svg.selectAll('g.dots').data([null]).join('g').attr('class','dots');
+
+  // brush layer: insert BEFORE dots so dots stay on top
+  const gBrush = svg.selectAll('g.brush')
+    .data([null])
+    .join('g')
+      .attr('class','brush');
+
+  // ensure order: grid < brush < dots
+  gBrush.lower();          // move brush below dots
+  gGrid.lower();           // keep grid at the very bottom
+
+  const brush = d3.brush()
+    .extent([[M.left, M.top], [W - M.right, H - M.bottom]])
+    .on('brush', brushed)
+    .on('end', ended);
+
+  gBrush.call(brush);
+
+  function brushed(event) {
+    if (!event.selection) return;
+    const [[x0, y0], [x1, y1]] = event.selection;
+
+    const dots = gDots.selectAll('circle');
+    const idx = [];
+    dots.each(function (_d, i) {
+      const cx = +this.getAttribute('cx');
+      const cy = +this.getAttribute('cy');
+      if (x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1) idx.push(i);
+    });
+
+    applySelection(dots, idx, true);
+  }
+
+  function ended(event) {
+    if (!event.selection) {
+      // clear selection but KEEP the brush so you can drag again
+      gBrush.call(brush.move, null);
+      applySelection(gDots.selectAll('circle'), [], false);
+    } else {
+      // make the selection box non-blocking (hover still passes through)
+      gBrush.select('.selection').style('pointer-events', 'none');
+      brushed(event);
+    }
+  }
+
+  function applySelection(dots, indexes, active) {
+    const label = d3.select('#selection-count');
+    if (!active || indexes.length === 0) {
+      dots.classed('selected', false).classed('faded', false);
+      if (!label.empty()) label.text('No commits selected');
+      return;
+    }
+    const set = new Set(indexes);
+    dots.classed('selected', (_d, i) => set.has(i))
+        .classed('faded',   (_d, i) => !set.has(i));
+    if (!label.empty()) label.text(`${indexes.length} selected`);
+  }
+}
+
+
+
+// //6.5.5
+// function renderSelectionCount(selection) {
+//   const selectedCommits = selection
+//     ? commits.filter((d) => isCommitSelected(selection, d))
+//     : [];
+
+//   const countElement = document.querySelector('#selection-count');
+//   countElement.textContent = `${
+//     selectedCommits.length || 'No'
+//   } commits selected`;
+
+//   return selectedCommits;
+// }
+
+
+// // 6.5.6 the language breakdown if this even works
+// function renderLanguageBreakdown(selection) {
+//   const selectedCommits = selection
+//     ? commits.filter((d) => isCommitSelected(selection, d))
+//     : [];
+//   const container = document.getElementById('language-breakdown');
+
+//   if (selectedCommits.length === 0) {
+//     container.innerHTML = '';
+//     return;
+//   }
+//   const requiredCommits = selectedCommits.length ? selectedCommits : commits;
+//   const lines = requiredCommits.flatMap((d) => d.lines);
+
+//   // Use d3.rollup to count lines per language
+//   const breakdown = d3.rollup(
+//     lines,
+//     (v) => v.length,
+//     (d) => d.type,
+//   );
+
+//   // Update DOM with breakdown
+//   container.innerHTML = '';
+
+//   for (const [language, count] of breakdown) {
+//     const proportion = count / lines.length;
+//     const formatted = d3.format('.1~%')(proportion);
+
+//     container.innerHTML += `
+//             <dt>${language}</dt>
+//             <dd>${count} lines (${formatted})</dd>
+//         `;
+//   }
+// }
+
+
 let data = await loadData();
 let commits = processCommits(data);
 
 renderCommitInfo(data, commits);
 renderScatterPlot(data, commits);
+// createBrushSelector(svg);
+addBrushOverlay();
+// enableBrushing({ svg, margin, width, height });
+
 console.log('lookup →', (document.getElementById('commit-link').textContent), window.LINES_BY_COMMIT?.get(document.getElementById('commit-link').textContent));
 
 console.log(commits);
-
-
-// // --- Diagnostic check for commit key matching ---
-// console.log('🔍 Checking commit keys vs loc.csv');
-
-// if (window.LINES_BY_COMMIT) {
-//   console.log('LINES_BY_COMMIT entries:', window.LINES_BY_COMMIT.size);
-
-//   // Print a few keys from loc.csv
-//   console.log('Sample keys from loc.csv:');
-//   console.log(Array.from(window.LINES_BY_COMMIT.keys()).slice(0, 10));
-// }
-
-// // If you have the commits array handy:
-// if (typeof commits !== 'undefined') {
-//   console.log('Sample commits (first 5):');
-//   commits.slice(0, 5).forEach((c, i) => {
-//     const raw = c.sha || c.id || c.commit || '';
-//     const key7 = String(raw).match(/[0-9a-f]{7,40}/i)?.[0]?.slice(0, 7) || '';
-//     const linesFromMap = window.LINES_BY_COMMIT?.get(key7);
-//     console.log(`#${i}`, { raw, key7, linesFromMap });
-//   });
-// }
