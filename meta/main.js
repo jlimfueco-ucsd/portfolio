@@ -154,18 +154,48 @@ function renderScatterPlot(rows, commits) {
     .call(d3.axisLeft(yScale).tickFormat('').tickSize(-usable.width));
 
   // Axes
+  // const xAxis = d3.axisBottom(xScale)
+  //   .ticks(d3.timeDay.every(6))
+  //   .tickFormat(d3.timeFormat('%b %d'));
+
+  // ----- FIXED X-AXIS (UTC, anchored every 6 days) -----
+
+  // Get the current xScale’s domain
+  const [xmin, xmax] = xScale.domain();
+
+  // Start ticks at the 1st of the min month (UTC)
+  const tickStart = new Date(Date.UTC(xmin.getUTCFullYear(), xmin.getUTCMonth(), 1));
+
+  // End ticks at the next rounded-up day (UTC)
+  const tickEnd = d3.utcDay.ceil(xmax);
+
+  // Generate tick positions every 6 days
+  const xTickValues = d3.utcDay.range(tickStart, tickEnd, 6);
+
+  // Build the axis (use same xScale, just new tickValues)
   const xAxis = d3.axisBottom(xScale)
-    .ticks(d3.timeDay.every(6))
-    .tickFormat(d3.timeFormat('%b %d'));
+    .tickValues(xTickValues)
+    .tickFormat(d3.utcFormat('%b %d'))
+    .tickSizeOuter(0);
+
+  // Remove any previous x-axis and draw a new one
+  svg.selectAll('.axis.x-axis').remove();
+  svg.append('g')
+    .attr('class', 'axis x-axis')
+    .attr('transform', `translate(0, ${usable.bottom})`)
+    .call(xAxis);
+
+  // ----- end FIXED X-AXIS -----
+
 
   const yAxis = d3.axisLeft(yScale)
     .tickValues(d3.range(0, 25, 2))
     .tickFormat(d => String(d).padStart(2, '0') + ':00');
 
-  svg.append('g')
-    .attr('class', 'axis x-axis')
-    .attr('transform', `translate(0,${usable.bottom})`)
-    .call(xAxis);
+  // svg.append('g')
+  //   .attr('class', 'axis x-axis')
+  //   .attr('transform', `translate(0,${usable.bottom})`)
+  //   .call(xAxis);
 
   svg.append('g')
     .attr('class', 'axis y-axis')
@@ -227,7 +257,6 @@ function renderScatterPlot(rows, commits) {
       hideTip();
     });
 }
-
 
 function renderTooltipContent(commit) {
   const elLink   = document.getElementById('commit-link');
@@ -298,24 +327,24 @@ console.log('lookup →', (document.getElementById('commit-link').textContent), 
 console.log(commits);
 
 
-// --- Diagnostic check for commit key matching ---
-console.log('🔍 Checking commit keys vs loc.csv');
+// // --- Diagnostic check for commit key matching ---
+// console.log('🔍 Checking commit keys vs loc.csv');
 
-if (window.LINES_BY_COMMIT) {
-  console.log('LINES_BY_COMMIT entries:', window.LINES_BY_COMMIT.size);
+// if (window.LINES_BY_COMMIT) {
+//   console.log('LINES_BY_COMMIT entries:', window.LINES_BY_COMMIT.size);
 
-  // Print a few keys from loc.csv
-  console.log('Sample keys from loc.csv:');
-  console.log(Array.from(window.LINES_BY_COMMIT.keys()).slice(0, 10));
-}
+//   // Print a few keys from loc.csv
+//   console.log('Sample keys from loc.csv:');
+//   console.log(Array.from(window.LINES_BY_COMMIT.keys()).slice(0, 10));
+// }
 
-// If you have the commits array handy:
-if (typeof commits !== 'undefined') {
-  console.log('Sample commits (first 5):');
-  commits.slice(0, 5).forEach((c, i) => {
-    const raw = c.sha || c.id || c.commit || '';
-    const key7 = String(raw).match(/[0-9a-f]{7,40}/i)?.[0]?.slice(0, 7) || '';
-    const linesFromMap = window.LINES_BY_COMMIT?.get(key7);
-    console.log(`#${i}`, { raw, key7, linesFromMap });
-  });
-}
+// // If you have the commits array handy:
+// if (typeof commits !== 'undefined') {
+//   console.log('Sample commits (first 5):');
+//   commits.slice(0, 5).forEach((c, i) => {
+//     const raw = c.sha || c.id || c.commit || '';
+//     const key7 = String(raw).match(/[0-9a-f]{7,40}/i)?.[0]?.slice(0, 7) || '';
+//     const linesFromMap = window.LINES_BY_COMMIT?.get(key7);
+//     console.log(`#${i}`, { raw, key7, linesFromMap });
+//   });
+// }
