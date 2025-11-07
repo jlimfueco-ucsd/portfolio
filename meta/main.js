@@ -415,11 +415,6 @@ function addBrushOverlay() {
 // Call once after your dots are drawn:
 addBrushOverlay();
 
-
-// Call once after you draw the dots:
-addBrushOverlay();
-
-
 // === 6.5.6 helpers: language tally from commit.lines (rows from loc.csv) ===
 const EXT_TO_LANG = new Map([
   ['js','JS'], ['ts','TS'], ['jsx','JS'], ['tsx','TS'],
@@ -472,17 +467,24 @@ function renderLanguageBreakdownFromSelection(selectedCommits = []) {
     const dt = document.createElement('dt');
     dt.textContent = lang;
 
-    const dd = document.createElement('dd');
-    const pctLabel = (pct * 100).toFixed(pct >= 0.095 ? 0 : 1) + '%';
-    dd.textContent = `${lines.toLocaleString()} (${pctLabel})`;
+    const ddLines = document.createElement('dd');
+    ddLines.className = 'lines';
+    ddLines.textContent = `${lines.toLocaleString('en-US')} lines`;
 
-    dl.append(dt, dd);
+    const ddPct = document.createElement('dd');
+    ddPct.className = 'pct';
+    const pctLabel = (pct * 100).toFixed(pct >= 0.095 ? 0 : 1) + '%';
+    ddPct.textContent = `(${pctLabel})`;
+
+    dl.append(dt, ddLines, ddPct);
   }
 
-  const dtT = document.createElement('dt'); dtT.textContent = 'Total Lines Edited';
-  const ddT = document.createElement('dd'); ddT.textContent = total.toLocaleString();
+  // Total row (spans full width)
+  const dtT = document.createElement('dt'); dtT.className = 'total'; dtT.textContent = 'Total Lines Edited';
+  const ddT = document.createElement('dd'); ddT.className = 'total'; ddT.textContent = total.toLocaleString('en-US');
   dl.append(dtT, ddT);
 }
+
 
 function clearLanguageBreakdown() {
   const dl = document.querySelector('#language-breakdown');
