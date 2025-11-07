@@ -26,20 +26,26 @@
 
   <h2>Commits by time of day</h2>
   <div id="chart">
-    <dl id="commit-tooltip" class="info tooltip">
-      <dt>Commit</dt>
-      <dd>
-        <a href="" id="commit-link" target="_blank"></a>
-      </dd>
+  <dl id="commit-tooltip" class="info tooltip is-hidden">
+    <dt>Commit</dt>
+    <dd><a href="" id="commit-link" target="_blank"></a></dd>
 
-      <dt>Date</dt>
-      <dd id="commit-date"></dd>
+    <dt>Date</dt>
+    <dd id="commit-date"></dd>
 
-      <!-- Add: Time, author, lines edited -->
-    </dl>
+    <dt>Time</dt>
+    <dd id="commit-time"></dd>
+
+    <dt>Author</dt>
+    <dd id="commit-author"></dd>
+    
+    <dt>Lines Edited</dt>
+    <dd id="commit-lines"></dd>
+    
+  </dl>
   </div>
 
-</section>
+  </section>
 
 
   <script src="../global.js" type="module"></script>
