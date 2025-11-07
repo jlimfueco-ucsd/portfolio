@@ -341,39 +341,31 @@ function renderTooltipContent(commit) {
 }
 
 
-// === 6.5 — brush overlay UNDER dots (hover always works), reusable forever
+// === 6.5 — Brush overlay aligned to g.dots bbox (no bottom gap) ===
 function addBrushOverlay() {
   const svg = d3.select('#chart').select('svg');
   if (svg.empty()) return;
 
-  // resolve drawing size
-  let W, H;
-  const vb = svg.attr('viewBox');
-  if (vb) { const p = vb.trim().split(/\s+/).map(Number); W = p[2]; H = p[3]; }
-  else { W = +svg.attr('width'); H = +svg.attr('height'); }
-
-  const M = (typeof margin === 'object') ? margin : { left: 40, right: 20, top: 10, bottom: 30 };
-
-  // ensure standard layers exist
-  const gGrid  = svg.selectAll('g.gridlines').data([null]).join('g').attr('class','gridlines');
   const gDots  = svg.selectAll('g.dots').data([null]).join('g').attr('class','dots');
+  const gBrush = svg.selectAll('g.brush').data([null]).join('g').attr('class','brush');
+  gBrush.lower(); // keep under dots so hover still works
 
-  // brush layer: insert BEFORE dots so dots stay on top
-  const gBrush = svg.selectAll('g.brush')
-    .data([null])
-    .join('g')
-      .attr('class','brush');
+  // --- Read g.dots geometry & transform ---
+  const bb = gDots.node().getBBox(); // rendered bbox of dots container
+  const m  = gDots.node().transform?.baseVal?.consolidate()?.matrix;
+  const tx = m ? m.e : 0;   // translation X of g.dots
+  const ty = m ? m.f : 0;   // translation Y of g.dots
 
-  // ensure order: grid < brush < dots
-  gBrush.lower();          // move brush below dots
-  gGrid.lower();           // keep grid at the very bottom
+  // Brush lives in root SVG coords; extent matches g.dots bbox in root coords
+  const extent = [[tx + bb.x,          ty + bb.y],
+                  [tx + bb.x + bb.width, ty + bb.y + bb.height]];
 
   const brush = d3.brush()
-    .extent([[M.left, M.top], [W - M.right, H - M.bottom]])
+    .extent(extent)
     .on('brush', brushed)
-    .on('end', ended);
+    .on('end',   ended);
 
-  gBrush.call(brush);
+  gBrush.attr('transform', null).call(brush);
 
   function brushed(event) {
     if (!event.selection) return;
@@ -381,102 +373,133 @@ function addBrushOverlay() {
 
     const dots = gDots.selectAll('circle');
     const idx = [];
-    dots.each(function (_d, i) {
-      const cx = +this.getAttribute('cx');
-      const cy = +this.getAttribute('cy');
-      if (x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1) idx.push(i);
+    const selected = [];
+
+    dots.each(function(d, i) {
+      // circle cx/cy are in g.dots LOCAL coords; convert to ROOT coords by adding tx,ty
+      const cxAbs = (+this.getAttribute('cx')) + tx;
+      const cyAbs = (+this.getAttribute('cy')) + ty;
+      if (x0 <= cxAbs && cxAbs <= x1 && y0 <= cyAbs && cyAbs <= y1) {
+        idx.push(i);
+        selected.push(d); // d is your commit (has .lines)
+      }
     });
 
-    applySelection(dots, idx, true);
+    // style selected/faded
+    const set = new Set(idx);
+    dots.classed('selected', (_d, i) => set.has(i))
+        .classed('faded',   (_d, i) => !set.has(i));
+
+    // label
+    const label = d3.select('#selection-count');
+    if (!label.empty()) label.text(idx.length ? `${idx.length} selected` : 'No commits selected');
+
+    // language panel
+    renderLanguageBreakdownFromSelection(selected);
   }
 
   function ended(event) {
     if (!event.selection) {
-      // clear selection but KEEP the brush so you can drag again
       gBrush.call(brush.move, null);
-      applySelection(gDots.selectAll('circle'), [], false);
-    } else {
-      // make the selection box non-blocking (hover still passes through)
-      gBrush.select('.selection').style('pointer-events', 'none');
-      brushed(event);
-    }
-  }
-
-  function applySelection(dots, indexes, active) {
-    const label = d3.select('#selection-count');
-    if (!active || indexes.length === 0) {
+      const dots = gDots.selectAll('circle');
       dots.classed('selected', false).classed('faded', false);
+      const label = d3.select('#selection-count');
       if (!label.empty()) label.text('No commits selected');
+      clearLanguageBreakdown();
       return;
     }
-    const set = new Set(indexes);
-    dots.classed('selected', (_d, i) => set.has(i))
-        .classed('faded',   (_d, i) => !set.has(i));
-    if (!label.empty()) label.text(`${indexes.length} selected`);
+    gBrush.select('.selection').style('pointer-events', 'none'); // keep hover alive
   }
 }
 
+// Call once after your dots are drawn:
+addBrushOverlay();
 
 
-// //6.5.5
-// function renderSelectionCount(selection) {
-//   const selectedCommits = selection
-//     ? commits.filter((d) => isCommitSelected(selection, d))
-//     : [];
-
-//   const countElement = document.querySelector('#selection-count');
-//   countElement.textContent = `${
-//     selectedCommits.length || 'No'
-//   } commits selected`;
-
-//   return selectedCommits;
-// }
+// Call once after you draw the dots:
+addBrushOverlay();
 
 
-// // 6.5.6 the language breakdown if this even works
-// function renderLanguageBreakdown(selection) {
-//   const selectedCommits = selection
-//     ? commits.filter((d) => isCommitSelected(selection, d))
-//     : [];
-//   const container = document.getElementById('language-breakdown');
+// === 6.5.6 helpers: language tally from commit.lines (rows from loc.csv) ===
+const EXT_TO_LANG = new Map([
+  ['js','JS'], ['ts','TS'], ['jsx','JS'], ['tsx','TS'],
+  ['html','HTML'], ['css','CSS'],
+  ['md','Markdown'], ['json','JSON'], ['yml','YAML'], ['yaml','YAML'],
+  ['py','Python'], ['rb','Ruby'], ['java','Java'],
+  ['c','C'], ['cpp','C++'], ['cc','C++'], ['h','C/C++'], ['hpp','C++'],
+  ['cs','C#'], ['go','Go'], ['rs','Rust'], ['php','PHP'], ['sql','SQL']
+]);
 
-//   if (selectedCommits.length === 0) {
-//     container.innerHTML = '';
-//     return;
-//   }
-//   const requiredCommits = selectedCommits.length ? selectedCommits : commits;
-//   const lines = requiredCommits.flatMap((d) => d.lines);
+function extFromPath(p='') {
+  const i = p.lastIndexOf('.');
+  return i < 0 ? '' : p.slice(i+1).toLowerCase();
+}
+function langFromPath(p='') {
+  const ext = extFromPath(p);
+  return ext ? (EXT_TO_LANG.get(ext) ?? ext.toUpperCase()) : 'Other';
+}
 
-//   // Use d3.rollup to count lines per language
-//   const breakdown = d3.rollup(
-//     lines,
-//     (v) => v.length,
-//     (d) => d.type,
-//   );
+function renderLanguageBreakdownFromSelection(selectedCommits = []) {
+  const dl = document.querySelector('#language-breakdown');
+  if (!dl) return;
 
-//   // Update DOM with breakdown
-//   container.innerHTML = '';
+  const counts = new Map();
+  let total = 0;
 
-//   for (const [language, count] of breakdown) {
-//     const proportion = count / lines.length;
-//     const formatted = d3.format('.1~%')(proportion);
+  for (const c of selectedCommits) {
+    const rows = Array.isArray(c?.lines) ? c.lines : [];
+    for (const r of rows) {
+      const lang = langFromPath(r.file || '');
+      counts.set(lang, (counts.get(lang) || 0) + 1);
+      total += 1;
+    }
+  }
 
-//     container.innerHTML += `
-//             <dt>${language}</dt>
-//             <dd>${count} lines (${formatted})</dd>
-//         `;
-//   }
-// }
+  dl.innerHTML = '';
 
+  if (total === 0) {
+    const dt = document.createElement('dt'); dt.textContent = 'Languages';
+    const dd = document.createElement('dd'); dd.textContent = '—';
+    dl.append(dt, dd);
+    return;
+  }
+
+  const rows = Array.from(counts, ([lang, lines]) => ({
+    lang, lines, pct: lines / total
+  })).sort((a,b) => b.lines - a.lines);
+
+  for (const { lang, lines, pct } of rows) {
+    const dt = document.createElement('dt');
+    dt.textContent = lang;
+
+    const dd = document.createElement('dd');
+    const pctLabel = (pct * 100).toFixed(pct >= 0.095 ? 0 : 1) + '%';
+    dd.textContent = `${lines.toLocaleString()} (${pctLabel})`;
+
+    dl.append(dt, dd);
+  }
+
+  const dtT = document.createElement('dt'); dtT.textContent = 'Total Lines Edited';
+  const ddT = document.createElement('dd'); ddT.textContent = total.toLocaleString();
+  dl.append(dtT, ddT);
+}
+
+function clearLanguageBreakdown() {
+  const dl = document.querySelector('#language-breakdown');
+  if (!dl) return;
+  dl.innerHTML = '';
+  const dt = document.createElement('dt'); dt.textContent = 'Languages';
+  const dd = document.createElement('dd'); dd.textContent = '—';
+  dl.append(dt, dd);
+}
 
 let data = await loadData();
 let commits = processCommits(data);
 
+clearLanguageBreakdown();
 renderCommitInfo(data, commits);
 renderScatterPlot(data, commits);
-// createBrushSelector(svg);
 addBrushOverlay();
-// enableBrushing({ svg, margin, width, height });
 
 console.log('lookup →', (document.getElementById('commit-link').textContent), window.LINES_BY_COMMIT?.get(document.getElementById('commit-link').textContent));
 

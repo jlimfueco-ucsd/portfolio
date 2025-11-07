@@ -756,6 +756,58 @@ circle:hover {
   }
 }
 
+/* fixing the language stats */
+/* --- Horizontal grid layout for language breakdown --- */
+#language-breakdown {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem 2rem;
+  text-align: center;
+  margin-top: 0.5rem;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+#language-breakdown dt {
+  grid-row: 1;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+  opacity: 0.95;
+}
+
+#language-breakdown dd {
+  grid-row: 2;
+  font-size: 0.95rem;
+  margin: 0;
+  opacity: 0.9;
+}
+
+#language-breakdown dd + dd {
+  grid-row: 3;
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+
+/* Remove bullets & spacing */
+#language-breakdown dt,
+#language-breakdown dd {
+  padding: 0;
+  border: none;
+}
+
+/* Responsive stacking for narrow screens */
+@media (max-width: 600px) {
+  #language-breakdown {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+  #language-breakdown dt {
+    margin-top: 0.75rem;
+  }
+}
+
+
 /* Manual theme toggle (if using global.js to change color-scheme) */
 html[data-theme="light"] .axis text,
 html[style*="color-scheme: light"] .axis text {
