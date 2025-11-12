@@ -1,5 +1,12 @@
 [
     {
+        "title": "Rolling in the Deep",
+        "year": "2025",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "This project is a deployment of bike travel across the greater Boston area.",
+        "hidden": false
+    },
+    {
         "title": "Social Media Trend & Engagement Analysis",
         "year": "2025",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
