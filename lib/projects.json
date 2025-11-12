@@ -2,7 +2,7 @@
     {
         "title": "Rolling in the Deep",
         "year": "2025",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "image": "./images/Rolling in the Deep.png",
         "description": "This project is a deployment of bike travel across the greater Boston area.",
         "hidden": false
     },
