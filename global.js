@@ -21,7 +21,8 @@ export async function fetchJSON(url) {
   }
 }
 
-// Lab 4.1.4 — add the heading level
+
+// Lab 4.1.4 – add the heading level
 export function renderProjects(projects, containerElement, headingLevel = 'h2') {
   // 4.1.4.2 – clear container
   containerElement.innerHTML = '';
@@ -31,16 +32,22 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
   const valid = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
   const tag = valid.has(level) ? level : 'h2';
 
+  // 👇 NEW: are we on /projects/ ?
+  const onProjectsPage = window.location.pathname.includes('/projects/');
+
   // 4.1.4.3 – loop through projects
   for (const p of projects) {
     const article = document.createElement('article');
-    // // 5.0.1 add the years in
-    // article.setAttribute('data-year', p.year); DIDNT WORK for adding year instead added to article.innerHTML
-    // 4.1.4.4 – fill each article with project data
 
-    const imgPrefix = window.location.pathname.includes('/projects/')
-      ? '..'
-      : '.';
+    // 👇 figure out the correct image path
+    let imageSrc = p.image;
+    if (!/^https?:\/\//.test(imageSrc)) {
+      // it's a local image like "images/..."
+      const prefix = onProjectsPage ? '..' : '.';
+      imageSrc = `${prefix}/${imageSrc}`; // -> ../images/... or ./images/...
+    }
+
+    // 4.1.4.4 – fill each article with project data
     article.innerHTML = `
       <div class="card-head">
         <span class="year-pill">${p.year}</span>
@@ -50,12 +57,15 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
             : `<div class="project-title">${p.title}</div>`
         }
       </div>
-      <img src="${p.image}" alt="${p.title}">
+      <img src="${imageSrc}" alt="${p.title}">
       <p>${p.description}</p>
     `;
-      containerElement.appendChild(article);
-    }
+
+    // 4.1.4.5 – append article to container
+    containerElement.appendChild(article);
+  }
 }
+
 
 // Lab 4.3.2
 export async function fetchGitHubData(username) {
