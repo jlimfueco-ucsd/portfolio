@@ -2,7 +2,7 @@
     {
         "title": "Rolling in the Deep",
         "year": "2025",
-        "image": "./images/Rolling in the Deep.png",
+        "image": "/images/Rolling in the Deep.png",
         "description": "This project is a deployment of bike travel across the greater Boston area.",
         "hidden": false
     },
