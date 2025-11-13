@@ -24,30 +24,24 @@ export async function fetchJSON(url) {
 
 // Lab 4.1.4 – add the heading level
 export function renderProjects(projects, containerElement, headingLevel = 'h2') {
-  // 4.1.4.2 – clear container
   containerElement.innerHTML = '';
 
-  // 4.1.4.6 – validate heading
-  const level = String(headingLevel).toLowerCase();
-  const valid = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
-  const tag = valid.has(level) ? level : 'h2';
-
-  // 👇 NEW: are we on /projects/ ?
+  // detect if we are inside /projects/
   const onProjectsPage = window.location.pathname.includes('/projects/');
 
-  // 4.1.4.3 – loop through projects
   for (const p of projects) {
     const article = document.createElement('article');
 
-    // 👇 figure out the correct image path
+    // fix the image path
     let imageSrc = p.image;
-    if (!/^https?:\/\//.test(imageSrc)) {
-      // it's a local image like "images/..."
+
+    // if it's NOT an absolute external URL
+    if (!imageSrc.startsWith('http')) {
+      // use ../images on projects page, ./images on home page
       const prefix = onProjectsPage ? '..' : '.';
-      imageSrc = `${prefix}/${imageSrc}`; // -> ../images/... or ./images/...
+      imageSrc = `${prefix}/${imageSrc}`;
     }
 
-    // 4.1.4.4 – fill each article with project data
     article.innerHTML = `
       <div class="card-head">
         <span class="year-pill">${p.year}</span>
@@ -57,11 +51,11 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
             : `<div class="project-title">${p.title}</div>`
         }
       </div>
+
       <img src="${imageSrc}" alt="${p.title}">
       <p>${p.description}</p>
     `;
 
-    // 4.1.4.5 – append article to container
     containerElement.appendChild(article);
   }
 }
