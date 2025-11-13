@@ -2,7 +2,7 @@
     {
         "title": "Rolling in the Deep",
         "year": "2025",
-        "image": "/images/Rolling in the Deep.png",
+        "image": "images/Rolling in the Deep.png",
         "description": "Deployment of bike travel across the greater Boston area. Able to show delta across a period of time ",
         "hidden": false,
         "url": "https://jlimfueco-ucsd.github.io/rolling_in_the_deep/"
@@ -10,7 +10,7 @@
     {
         "title": "Persuasive or Deceptive Visualization? ",
         "year": "2025",
-        "image": "/images/project2_A.jpg",
+        "image": "images/project2_A.jpg",
         "description": "A visual analysis of good and bad practice. Data set was NYPD Police Department complaints",
         "hidden": false,
         "url": "https://jlimfueco-ucsd.github.io/portfolio/projects/DSC209_Project2.html"
@@ -18,7 +18,7 @@
     {
         "title": "Social Media Trend & Engagement Analysis",
         "year": "2025",
-        "image": "/images/box plot japan.png",
+        "image": "images/box plot japan.png",
         "description": "This is my analysis of Social Media Trends and Media Engagement. We're going to be going over data across different Media platforms, regions, and hashtags. This dataset was recently updated as of 3/9/2025 for use with trend analysis and influencer marketing, and the last major update before publishing this work is 3/28/2025. Data Science studies for such a topic are ubiquitous: finding the next big trend and market is always relevant to the influencer life. I want to deep dive into this data as it isn't just stuck to the US market, so please enjoy this notebook's exploration into the successes and failures of social media trends.",
         "hidden": false,
         "url": "https://colab.research.google.com/drive/1mmHD9gCrL54k1E9l7JpZaB5Gn3jUJCgB?authuser=2"
@@ -26,7 +26,7 @@
     {
         "title": "Multi-Trip Reconstruction",
         "year": "2022",
-        "image": "/images/1664601586924.jpg",
+        "image": "images/1664601586924.jpg",
         "description": "Pilot Tesla's next generation of manual labeling to create Automated 3D Labeling in vector space.",
         "hidden": false,
         "url": false
