@@ -3,91 +3,112 @@
         "title": "Rolling in the Deep",
         "year": "2025",
         "image": "/images/Rolling in the Deep.png",
-        "description": "This project is a deployment of bike travel across the greater Boston area.",
-        "hidden": false
+        "description": "Deployment of bike travel across the greater Boston area. Able to show delta across a period of time ",
+        "hidden": false,
+        "url": "https://jlimfueco-ucsd.github.io/rolling_in_the_deep/"
+    },
+    {
+        "title": "Persuasive or Deceptive Visualization? ",
+        "year": "2025",
+        "image": "/images/project2_A.jpg",
+        "description": "A visual analysis of good and bad practice. Data set was NYPD Police Department complaints",
+        "hidden": false,
+        "url": "https://jlimfueco-ucsd.github.io/portfolio/projects/DSC209_Project2.html"
     },
     {
         "title": "Social Media Trend & Engagement Analysis",
         "year": "2025",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "image": "/images/box plot japan.png",
         "description": "This is my analysis of Social Media Trends and Media Engagement. We're going to be going over data across different Media platforms, regions, and hashtags. This dataset was recently updated as of 3/9/2025 for use with trend analysis and influencer marketing, and the last major update before publishing this work is 3/28/2025. Data Science studies for such a topic are ubiquitous: finding the next big trend and market is always relevant to the influencer life. I want to deep dive into this data as it isn't just stuck to the US market, so please enjoy this notebook's exploration into the successes and failures of social media trends.",
-        "hidden": false
+        "hidden": false,
+        "url": "https://colab.research.google.com/drive/1mmHD9gCrL54k1E9l7JpZaB5Gn3jUJCgB?authuser=2"
     },
     {
         "title": "Multi-Trip Reconstruction",
         "year": "2022",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "image": "/images/1664601586924.jpg",
         "description": "Pilot Tesla's next generation of manual labeling to create Automated 3D Labeling in vector space.",
-        "hidden": false
+        "hidden": false,
+        "url": false
     },
     {
         "title": "Lane Graph",
         "year": "2020",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
         "description": "Curate multiple data sets using geometric and semantic understanding to predict lane maneuvers for safe, human-like driving.",
-        "hidden": false
+        "hidden": false,
+        "url": false
     },
     {
         "title": "URL Vulnerablility Check: Achilles",
         "year": "2020",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
         "description": "Achilles is a personal project that checks URLS for vulnerabilities with regards to form, comments, and passwords. It will scan through website HTML code to check for issues and finally reports the findings to a txt file of your choosing. STANDARD BUILD: achilles.py <YOUR HTTP/HTTPS WEBSITE HERE> -o report.txt",
-        "hidden": false
+        "hidden": false,
+        "url": false
     },
     {
         "title": "FREECycle Site Prototype",
         "year": "2020",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
         "description": "FREEcycle is a prototype website that will provide the staff, faculty and students of Seattle University a safe and easy way to reuse and upcycle items within the community that would otherwise be thrown away.  This project will not only benefit the university by being a low maintenance, self-policing system for reducing waste, but also benefit the staff and students by providing free access to items that they may need. Development included C#, Razor, .NET, javascript, and Sprint development.",
-        "hidden": false
+        "hidden": false,
+        "url": false
     },
     {
         "title": "KiloWatts for Humanity (Phillipines)",
         "year": "2019",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
         "description": "Analyzed raw real world data to clean up messy data sets, calculate new variables of interest out of combinations of given variables, and think critically and creatively about what sorts of information can be obtained from survey data. ",
-        "hidden": false
+        "hidden": false,
+        "url": false
     },
     {
         "title": "J.A.R.V.I.S Client-Server Digital Assitant",
         "year": "2020",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
         "description": "Contributed to the development and creation of a digital assistant program with modular functionality including fun facts, storing messages in a global inbox, and two-way communication. Development included C++ across two main files for a client and server functionality.",
-        "hidden": false
+        "hidden": false,
+        "url": false
     },
     {
         "title": "Probabilistic Game Theory",
         "year": "2018",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
         "description": "Using Linear Algebra, Monte Carlo simulations, and physical aspects of mathematical models, I can predict or potentially find strategic advantages with regards to the long term behavior of games. By means of MATLAB, EXCEL and Markovian concepts, a process can be modeled to obtain expected behavior.",
-        "hidden": false
+        "hidden": false,
+        "url": false
     },
     {
         "title": "Quam quia distinctio quod!",
         "year": "2025",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
         "description": "Officiis repellat quis rem possimus! In non delectus minima, perferendis at illum deleniti suscipit fuga eaque, quos, soluta nemo! Ea officia atque et velit esse delectus consectetur dolor, dolorem reprehenderit.",
-        "hidden": false
+        "hidden": false,
+        "url": false
     },
     {
         "title": "Expedita ullam ducimus mollitia!",
         "year": "2025",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
         "description": "Officiis reprehenderit, recusandae ab rerum sit, voluptatem odio non dolorum explicabo vitae magnam praesentium error provident illum, dolore enim hic nisi quis consequuntur. Dolores ea et placeat aliquid magni dignissimos?",
-        "hidden": false
+        "hidden": false,
+        "url": false
     },
     {
         "title": "Repellat porro perferendis minus.",
         "year": "2025",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
         "description": "Ex numquam dolores perferendis cupiditate laudantium sunt deserunt expedita veritatis neque delectus rerum aspernatur cumque voluptatum vel adipisci debitis impedit reiciendis sequi eius illo error, nesciunt iste. Nostrum, ipsam sequi!",
-        "hidden": false
+        "hidden": false,
+        "url": false
     },
     {
         "title": "Voluptas corrupti asperiores dolore!",
         "year": "2025",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
         "description": "Omnis facere, voluptatum magni accusamus molestias, ea excepturi, quam eaque esse asperiores quae rem suscipit. Quaerat odio hic, pariatur vitae temporibus dolorum possimus nemo quos dicta, eius voluptates nostrum omnis.",
-        "hidden": false
+        "hidden": false,
+        "url": false
     }
 ]

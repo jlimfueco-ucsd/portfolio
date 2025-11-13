@@ -37,15 +37,18 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
     // // 5.0.1 add the years in
     // article.setAttribute('data-year', p.year); DIDNT WORK for adding year instead added to article.innerHTML
     // 4.1.4.4 – fill each article with project data
-    article.innerHTML = `
-      <div class="card-head">
-        <span class="year-pill">${p.year}</span>
-        <div class="project-title">${p.title}</div>  <!-- div instead of h2 -->
-      </div>
-      <img src="${p.image}" alt="${p.title}">
-      <p>${p.description}</p>
-    `;
-    // 4.1.4.5 – append article to container
+  article.innerHTML = `
+    <div class="card-head">
+      <span class="year-pill">${p.year}</span>
+      ${
+        p.url
+          ? `<a class="project-title project-title-link" href="${p.url}">${p.title}</a>`
+          : `<div class="project-title">${p.title}</div>`
+      }
+    </div>
+    <img src="${p.image}" alt="${p.title}">
+    <p>${p.description}</p>
+  `;
     containerElement.appendChild(article);
   }
 }
